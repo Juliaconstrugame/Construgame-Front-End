@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* * 
+{ 
+    border:1px dotted red;
+    text-rendering:geometricPrecision;
+} */
+.layout-grid 
+{ 
+    @apply grid grid-cols-4 gap-4;
+}
+a
+{ 
+    @apply cursor-pointer underline;
+}
+
+.menu 
+{ 
+    left:-100vw;
+    transition: left 500ms ease;
+    @apply fixed w-[100vw] h-[100vh] max-w-xs top-0 z-50;
+}
+
+.menu.isMenuOpen
+{ 
+    left:0
+}
+
+.goal 
+{ 
+    bottom:-300px;
+    transition: bottom 500ms ease;
+    @apply left-0  bg-[#0E4405] z-50 w-[100vw] rounded-t-3xl fixed;
+}
+
+.goal.isGoal
+{ 
+    bottom: 0;
+}
+
+.out 
+{ 
+    bottom:-300px;
+    transition: bottom 500ms ease;
+    @apply left-0  bg-[#FFD4D4] z-50 w-[100vw] rounded-t-3xl fixed;
+}
+
+.out.isOut
+{ 
+    bottom: 0;
+}
+
+.radial-light
+{ 
+    background: radial-gradient(circle, rgba(23,160,0,1) 0%, rgba(23,160,0,0.23853291316526615) 50%, rgba(23,160,0,0) 100%);
+}
+
+hr
+{ 
+    color: #EDEDED;
+}
