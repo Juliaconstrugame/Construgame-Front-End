@@ -25,18 +25,13 @@ export const getQuestion = async (company, game, question) => {
 };
 
 export const sendAnswer = async (values) => {
-  // const { data } = await api.post(`/v1/userAnswer`, values);
-  const response = await fetch(process.env.API_URL + "/v1/userAnswer", {
-    method: "POST",
-    agent,
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: process.env.SECRET_KEY,
-    },
-    values,
-  });
+  const { data } = await api.post(`/v1/userAnswer`, values);
+  return data;
+};
 
-  const data = await response.json();
+export const getPoints = async (id, game) => {
+  const { data } = await api.get(
+    `/v1/userPointsGame?idUser=${id}&game=${game}`
+  );
   return data;
 };

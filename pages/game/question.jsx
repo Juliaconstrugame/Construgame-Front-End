@@ -1,3 +1,4 @@
+import React from "react";
 import Template from "../../src/components/Elements/Template";
 import Layout from "../../src/components/Layout";
 import Heading from "../../src/components/Elements/Heading";
@@ -20,12 +21,12 @@ export const getServerSideProps = async ({ query }) => {
 };
 
 export default function Question({ id, company, game, question }) {
-  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [selectedQuestion, setSelectedQuestion] = useState([]);
   const [time, setTime] = useState(0);
 
-  useEffect(() => {
-    console.log("TIME =>", time);
-  }, [time]);
+  // useEffect(() => {
+  //   console.log("TIME =>", time);
+  // }, [time]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -86,7 +87,10 @@ export default function Question({ id, company, game, question }) {
                                     bg-others-grey-100 
                                     outline outline-2 
                                     ${
-                                      selectedQuestion === index
+                                      selectedQuestion.length > 0 &&
+                                      selectedQuestion.filter(
+                                        (item) => item === text
+                                      ).length > 0
                                         ? "outline-[#00FF57]"
                                         : "outline-others-grey-200 "
                                     }
@@ -95,7 +99,15 @@ export default function Question({ id, company, game, question }) {
                                     p-4 
                                 `}
               key={`question-${index}`}
-              onClick={() => setSelectedQuestion(index)}
+              onClick={() => {
+                const added = selectedQuestion.filter((item) => item === text);
+
+                if (added.length > 0)
+                  setSelectedQuestion((values) =>
+                    values.filter((item) => item !== text)
+                  );
+                else setSelectedQuestion((values) => [...values, text]);
+              }}
             >
               <div className="">
                 <div
@@ -117,24 +129,15 @@ export default function Question({ id, company, game, question }) {
 
   const sendQuestionAnswer = async () => {
     try {
-      // await sendAnswer({
-      //   idUser: id,
-      //   game: Number(game),
-      //   numberAnswer: Number(question.questionNumber),
-      //   alternative: [selectedQuestion.toString()],
-      //   time,
-      // });
-
-      const response = await sendAnswer({
-        idUser: "63696814a41789eb7a0028e1",
-        game: 1,
-        numberAnswer: 6,
-        alternative: ["1"],
-        time: 5,
+      await sendAnswer({
+        idUser: id,
+        game: Number(game),
+        numberAnswer: Number(question.questionNumber),
+        alternative: selectedQuestion.map((item) => item.toString()),
+        time,
       });
-      console.log("RESPONSE =>", response);
-
       setTime(0);
+      setSelectedQuestion([]);
     } catch (error) {
       if (error.response) console.log("ERROR DATA:", error.response.data);
       else console.log("ERROR:", error);
@@ -158,25 +161,24 @@ export default function Question({ id, company, game, question }) {
               setSelectedQuestion={setSelectedQuestion}
             />
             <div>
-              <span onClick={sendQuestionAnswer}>
+              <Button
+                level="large"
+                style={selectedQuestion !== null ? "fill" : "inactive"}
+                onClick={sendQuestionAnswer}
+              >
                 <Link
                   href={`${
                     question?.questionNumber === 8
-                      ? "/game/end"
+                      ? `/game/end/?idUser=${id}&game=${game}`
                       : `/game/question/?id=${id}&company=${company}&game=${game}&question=${
                           Number(question.questionNumber) + 1
                         }`
                   }`}
                   passHref
                 >
-                  <Button
-                    level="large"
-                    style={selectedQuestion !== null ? "fill" : "inactive"}
-                  >
-                    CONTINUAR
-                  </Button>
+                  CONTINUAR
                 </Link>
-              </span>
+              </Button>
             </div>
           </div>
         </div>

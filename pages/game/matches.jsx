@@ -67,7 +67,18 @@ export default function Matches({ matches, answers, company, id }) {
 
               return (
                 <React.Fragment key={controlIndex}>
-                  {game.length > 0 && game[0].questions.length < 8 ? (
+                  {game.length === 0 && Number(index) === 1 ? (
+                    <Link
+                      href={`/game/question/?id=${id}&company=${company}&game=${1}&question=${1}`}
+                    >
+                      <MatchCard
+                        index={index}
+                        icon={icon}
+                        title={title}
+                        active={true}
+                      />
+                    </Link>
+                  ) : game[0]?.questions.length < 8 ? (
                     <Link
                       href={`/game/question/?id=${id}&company=${company}&game=${gameNumber}&question=${questionNumber}`}
                     >
@@ -75,7 +86,7 @@ export default function Matches({ matches, answers, company, id }) {
                         index={index}
                         icon={icon}
                         title={title}
-                        active={game[0].questions.length < 8}
+                        active={game[0]?.questions.length < 8}
                       />
                     </Link>
                   ) : (
