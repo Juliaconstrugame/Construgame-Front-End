@@ -1,7 +1,7 @@
 import React from "react";
 import Content from "./Content";
 import Footer from "./Footer";
-import Header from "./Header/indexZ"
+import Header from "./Header"
 
 export default function Template({ children, full }) {
     return (
@@ -10,7 +10,7 @@ export default function Template({ children, full }) {
                 <Header />
                 <Content full={full}>
                     {children}
-                </Content>
+                    </Content>
                 <Footer />
             </div>
         </React.Fragment>
