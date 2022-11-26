@@ -22,8 +22,8 @@ export default function Menu({ id, name, company, type }) {
 
   const navigation = [];
 
-  const settings = new NavigationOption("Configurações", "bx:cog", "/settings");
-  const logout = new NavigationOption("Sair", "bx:exit", "/logout");
+  // const settings = new NavigationOption("Configurações", "bx:cog", "/settings");
+  // const logout = new NavigationOption("Sair", "bx:exit", "/logout");
 
   navigation.push(new NavigationOption("Home", "bx:home", `/?id=${id}`));
 
@@ -73,7 +73,7 @@ export default function Menu({ id, name, company, type }) {
             </nav>
           </div>
           <div>
-            <nav className="flex flex-col gap-4">
+            {/* <nav className="flex flex-col gap-4">
               <div
                 className="p-1 flex gap-4 items-center cursor-pointer"
                 onClick={() => router.push(settings.address)}
@@ -88,7 +88,7 @@ export default function Menu({ id, name, company, type }) {
                 {logout.icon}
                 {logout.label}
               </div>
-            </nav>
+            </nav> */}
           </div>
         </div>
       </div>

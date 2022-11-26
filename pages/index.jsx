@@ -51,13 +51,13 @@ export default function Home({ user }) {
           </section>
           <section className="flex flex-col gap-4">
             <div className="flex justify-around">
-              <Button style="fill" level="large">
-                <Link
-                  href={`/game/matches/?id=${user.id}&name=${user.name}&company=${user.company}&type=${user.type}`}
-                >
+              <Link
+                href={`/game/matches/?id=${user.id}&name=${user.name}&company=${user.company}&type=${user.type}`}
+              >
+                <Button style="fill" level="large">
                   PARTICIPAR AGORA
-                </Link>
-              </Button>
+                </Button>
+              </Link>
             </div>
             <div className="">
               <p className="font-sans text-xs text-others-grey-700 leading-[20px]">

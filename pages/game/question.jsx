@@ -87,13 +87,14 @@ export default function Question({ id, company, game, question, type, name }) {
               className={`
                                     bg-others-grey-100 
                                     outline outline-2 
-                                    ${selectedQuestion.length > 0 &&
-                  selectedQuestion.filter(
-                    (item) => item === text
-                  ).length > 0
-                  ? "outline-[#00FF57]"
-                  : "outline-others-grey-200 "
-                }
+                                    ${
+                                      selectedQuestion.length > 0 &&
+                                      selectedQuestion.filter(
+                                        (item) => item === text
+                                      ).length > 0
+                                        ? "outline-[#00FF57]"
+                                        : "outline-others-grey-200 "
+                                    }
                                     flex flex-col gap-4
                                     rounded-2xl 
                                     p-4 
@@ -161,22 +162,24 @@ export default function Question({ id, company, game, question, type, name }) {
               setSelectedQuestion={setSelectedQuestion}
             />
             <div>
-              <Button
-                level="large"
-                style={selectedQuestion !== null ? "fill" : "inactive"}
-                onClick={sendQuestionAnswer}
-              >
-                <Link
-                  href={`${Number(question?.questionNumber) === 8
+              <Link
+                href={`${
+                  Number(question?.questionNumber) === 8
                     ? `/game/end/?idUser=${id}&game=${game}&name=${name}&type=${type}&company=${company}`
-                    : `/game/question/?id=${id}&company=${company}&game=${game}&question=${Number(question.questionNumber) + 1
-                    }&type=${type}&name=${name}`
-                    }`}
-                  passHref
+                    : `/game/question/?id=${id}&company=${company}&game=${game}&question=${
+                        Number(question.questionNumber) + 1
+                      }&type=${type}&name=${name}`
+                }`}
+                passHref
+              >
+                <Button
+                  level="large"
+                  style={selectedQuestion.length > 0 ? "fill" : "inactive"}
+                  onClick={sendQuestionAnswer}
                 >
                   CONTINUAR
-                </Link>
-              </Button>
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
