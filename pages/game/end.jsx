@@ -1,16 +1,15 @@
+import { Icon } from "@iconify/react"
 import Layout from "../../src/components/Layout"
 import Template from "../../src/components/Elements/Template"
 import Heading from "../../src/components/Elements/Heading"
 import Button from "../../src/components/Elements/Button"
-import { Icon } from "@iconify/react"
 
-export default function EndMatch() 
-{ 
+export default function EndMatch() {
     return (
         <Layout>
             <Template full={true}>
-                <div className="h-[calc(100vh_-_128px)] col-span-full"> 
-                    <div 
+                <div className="h-[calc(100vh_-_128px)] col-span-full">
+                    <div
                         className={
                             `
                                 relative
@@ -45,12 +44,12 @@ export default function EndMatch()
                                 <div className="rounded-md bg-primary-white px-4 py-6 flex gap-4 justify-between text-[#262626]">
                                     <div className="flex flex-col gap-2 items-center justify-center">
                                         <div className="flex gap-2 items-center justify-center">
-                                            <div> 
-                                                <Icon icon="icon-park-twotone:soccer-one"  height={22} />
+                                            <div>
+                                                <Icon icon="icon-park-twotone:soccer-one" height={22} />
                                             </div>
                                             <div>
-                                                Gol    
-                                            </div> 
+                                                Gol
+                                            </div>
                                         </div>
                                         <div className="text-center">
                                             <Heading customStyle="!text-[32px] !font-black">
@@ -60,12 +59,12 @@ export default function EndMatch()
                                     </div>
                                     <div className="flex flex-col gap-2 items-center justify-center">
                                         <div className="flex gap-2 items-center justify-center">
-                                            <div> 
+                                            <div>
                                                 <Icon icon="mdi:alarm-clock" height={22} />
                                             </div>
                                             <div>
-                                                Tempo    
-                                            </div> 
+                                                Tempo
+                                            </div>
                                         </div>
                                         <div className="text-center">
                                             <Heading customStyle="!text-[32px] !font-black">
@@ -75,12 +74,12 @@ export default function EndMatch()
                                     </div>
                                     <div className="flex flex-col gap-2 items-center justify-center">
                                         <div className="flex gap-2 items-center justify-center">
-                                            <div> 
-                                                <Icon icon="mdi:trophy-outline"  height={22} />
+                                            <div>
+                                                <Icon icon="mdi:trophy-outline" height={22} />
                                             </div>
                                             <div>
-                                                Pontos    
-                                            </div> 
+                                                Pontos
+                                            </div>
                                         </div>
                                         <div className="text-center">
                                             <Heading customStyle="!text-[32px] !font-black">
@@ -90,18 +89,18 @@ export default function EndMatch()
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
-                        <div 
-                            className="flex-1 w-full aspect-[6/5]" 
-                            style={{ 
+                        <div
+                            className="flex-1 w-full aspect-[6/5]"
+                            style={{
                                 backgroundImage: "url('/images/construgame-field-quiz.png')",
-                                backgroundPosition: "center center", 
-                                backgroundSize: "cover", 
+                                backgroundPosition: "center center",
+                                backgroundSize: "cover",
                                 backgroundRepeat: "no-repeat",
                             }}
                         />
-                            
+
                         <div className="container">
                             <Button level="large" customStyle="w-full">
                                 VER RANKING
