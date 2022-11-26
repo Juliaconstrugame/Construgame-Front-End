@@ -158,38 +158,36 @@ export default function Question({ id, company, game, question, type, name }) {
       <Layout title="Questão">
         <Template name={name} id={id} company={company} type={type}>
           <div>
+            <QuestionProgress
+              progress={Number(question?.questionNumber ?? "0")}
+            />
+            <QuestionTitle>{question?.question ?? ""}</QuestionTitle>
+          </div>
+          <div className="flex flex-col gap-8">
+            <QuestionList
+              data={question.alternative}
+              selectedQuestion={selectedQuestion}
+              setSelectedQuestion={setSelectedQuestion}
+            />
             <div>
-              <QuestionProgress
-                progress={Number(question?.questionNumber ?? "0")}
-              />
-              <QuestionTitle>{question?.question ?? ""}</QuestionTitle>
-            </div>
-            <div className="flex flex-col gap-8">
-              <QuestionList
-                data={question.alternative}
-                selectedQuestion={selectedQuestion}
-                setSelectedQuestion={setSelectedQuestion}
-              />
-              <div>
-                <Button
-                  level="large"
-                  style={selectedQuestion !== null ? "fill" : "inactive"}
-                  onClick={sendQuestionAnswer}
+              <Button
+                level="large"
+                style={selectedQuestion !== null ? "fill" : "inactive"}
+                onClick={sendQuestionAnswer}
+              >
+                <Link
+                  href={`${
+                    Number(question?.questionNumber) === 8
+                      ? `/game/end/?idUser=${id}&game=${game}&name=${name}&type=${type}&company=${company}`
+                      : `/game/question/?id=${id}&company=${company}&game=${game}&question=${
+                          Number(question.questionNumber) + 1
+                        }&type=${type}&name=${name}`
+                  }`}
+                  passHref
                 >
-                  <Link
-                    href={`${
-                      Number(question?.questionNumber) === 8
-                        ? `/game/end/?idUser=${id}&game=${game}&name=${name}&type=${type}&company=${company}`
-                        : `/game/question/?id=${id}&company=${company}&game=${game}&question=${
-                            Number(question.questionNumber) + 1
-                          }&type=${type}&name=${name}`
-                    }`}
-                    passHref
-                  >
-                    CONTINUAR
-                  </Link>
-                </Button>
-              </div>
+                  CONTINUAR
+                </Link>
+              </Button>
             </div>
           </div>
         </Template>

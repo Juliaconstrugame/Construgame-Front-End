@@ -12,10 +12,9 @@ export default function Awards({ name, id, company }) {
     <Layout title="Prêmios">
       <Template name={name} id={id} company={company}>
         <Image
-          className="w-screen"
           src="/images/awards.png"
-          width="200"
-          height="200"
+          width="1417"
+          height="1317"
           quality="100"
           // alt="Welcome Image"
         />
