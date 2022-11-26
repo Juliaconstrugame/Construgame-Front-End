@@ -15,12 +15,12 @@ import {
 } from "../../src/services/UserService";
 
 export const getServerSideProps = async ({ query }) => {
-  const { id, company, game, question } = query;
+  const { id, company, game, question, type, name } = query;
   const data = await getQuestion(company, game, question);
-  return { props: { id, company, game, question: data } };
+  return { props: { id, company, game, question: data, type, name } };
 };
 
-export default function Question({ id, company, game, question }) {
+export default function Question({ id, company, game, question, type, name }) {
   const [selectedQuestion, setSelectedQuestion] = useState([]);
   const [time, setTime] = useState(0);
 
@@ -29,6 +29,7 @@ export default function Question({ id, company, game, question }) {
   // }, [time]);
 
   useEffect(() => {
+    console.log(id, company, game, question, type, name);
     const interval = setInterval(() => {
       setTime((time) => time + 1);
     }, 1000);
@@ -132,7 +133,7 @@ export default function Question({ id, company, game, question }) {
       await sendAnswer({
         idUser: id,
         game: Number(game),
-        numberAnswer: Number(question.questionNumber),
+        numberAnswer: Number(question?.questionNumber),
         alternative: selectedQuestion.map((item) => item.toString()),
         time,
       });
@@ -146,7 +147,7 @@ export default function Question({ id, company, game, question }) {
 
   return (
     <Layout title="Questão">
-      <Template>
+      <Template name={name} id={id} company={company} type={type}>
         <div>
           <div>
             <QuestionProgress
@@ -168,11 +169,11 @@ export default function Question({ id, company, game, question }) {
               >
                 <Link
                   href={`${
-                    question?.questionNumber === 8
-                      ? `/game/end/?idUser=${id}&game=${game}`
+                    Number(question?.questionNumber) === 8
+                      ? `/game/end/?idUser=${id}&game=${game}name=${name}&type=${type}company=${company}`
                       : `/game/question/?id=${id}&company=${company}&game=${game}&question=${
                           Number(question.questionNumber) + 1
-                        }`
+                        }&type=${type}&name=${name}`
                   }`}
                   passHref
                 >

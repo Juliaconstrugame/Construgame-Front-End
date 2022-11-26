@@ -6,15 +6,22 @@ import Button from "../../src/components/Elements/Button";
 import { getPoints } from "../../src/services/UserService";
 
 export const getServerSideProps = async ({ query }) => {
-  const { idUser, game } = query;
+  const { idUser, game, company, type, name } = query;
   const points = await getPoints(idUser, game);
-  return { props: { points } };
+  return { props: { points, id: idUser, game, company, type, name } };
 };
 
-export default function EndMatch({ points }) {
+export default function EndMatch({ points, id, game, company, type, name }) {
   return (
     <Layout>
-      <Template full={true}>
+      <Template
+        full={true}
+        id={id}
+        name={name}
+        company={company}
+        type={type}
+        game={game}
+      >
         <div className="h-[calc(100vh_-_128px)] col-span-full">
           <div
             className={`

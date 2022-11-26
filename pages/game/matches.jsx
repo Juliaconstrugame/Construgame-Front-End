@@ -13,7 +13,7 @@ export async function getServerSideProps({ query }) {
   const company = query.company;
   const id = query.id;
   const name = query.name;
-  const type = query.type
+  const type = query.type;
   return { props: { matches, answers, company, id, name, type } };
 }
 
@@ -71,7 +71,7 @@ export default function Matches({ matches, answers, company, id, name, type }) {
                 <React.Fragment key={controlIndex}>
                   {game.length === 0 && Number(index) === 1 ? (
                     <Link
-                      href={`/game/question/?id=${id}&company=${company}&game=${1}&question=${1}`}
+                      href={`/game/question/?id=${id}&company=${company}&game=${1}&question=${1}&type=${type}&name=${name}`}
                     >
                       <MatchCard
                         index={index}
@@ -82,7 +82,7 @@ export default function Matches({ matches, answers, company, id, name, type }) {
                     </Link>
                   ) : game[0]?.questions.length < 8 ? (
                     <Link
-                      href={`/game/question/?id=${id}&company=${company}&game=${gameNumber}&question=${questionNumber}`}
+                      href={`/game/question/?id=${id}&company=${company}&game=${gameNumber}&question=${questionNumber}&type=${type}&name=${name}`}
                     >
                       <MatchCard
                         index={index}
