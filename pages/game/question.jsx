@@ -4,28 +4,36 @@ import Heading from "../../src/components/Elements/Heading";
 import Button from "../../src/components/Elements/Button";
 
 import { Icon } from "@iconify/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import dataService from "../../src/services/dataService";
-import { getQuestion } from "../../src/services/UserService";
+import {
+  getAnswersUser,
+  getQuestion,
+  sendAnswer,
+} from "../../src/services/UserService";
 
-async function getData({ company, game, question }) {
-  let resultQuestions = await dataService.questions({
-    company,
-    game,
-    question,
-  });
-  return resultQuestions;
-}
-
-export async function getServerSideProps({ query }) {
-  const { company, game, question } = query;
+export const getServerSideProps = async ({ query }) => {
+  const { id, company, game, question } = query;
   const data = await getQuestion(company, game, question);
-  return { props: { company, game, question: data } };
-}
+  return { props: { id, company, game, question: data } };
+};
 
-export default function Question({ company, game, question }) {
+export default function Question({ id, company, game, question }) {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [time, setTime] = useState(0);
+
+  useEffect(() => {
+    console.log("TIME =>", time);
+  }, [time]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime((time) => time + 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   function QuestionProgress({ progress }) {
     return (
@@ -54,7 +62,7 @@ export default function Question({ company, game, question }) {
         </div>
         <div className="flex items-center">
           <Heading level="small" customStyle="!text-[18px]">
-            {question.question}
+            {question?.question ?? ""}
           </Heading>
         </div>
       </div>
@@ -107,19 +115,41 @@ export default function Question({ company, game, question }) {
     );
   }
 
-  const sendQuestionAnswer = () => {
-    console.log("SELECTED QUESTION =>", selectedQuestion);
-  };
+  const sendQuestionAnswer = async () => {
+    try {
+      // await sendAnswer({
+      //   idUser: id,
+      //   game: Number(game),
+      //   numberAnswer: Number(question.questionNumber),
+      //   alternative: [selectedQuestion.toString()],
+      //   time,
+      // });
 
-  const questionNumber = Number(question.questionNumber);
+      const response = await sendAnswer({
+        idUser: "63696814a41789eb7a0028e1",
+        game: 1,
+        numberAnswer: 6,
+        alternative: ["1"],
+        time: 5,
+      });
+      console.log("RESPONSE =>", response);
+
+      setTime(0);
+    } catch (error) {
+      if (error.response) console.log("ERROR DATA:", error.response.data);
+      else console.log("ERROR:", error);
+    }
+  };
 
   return (
     <Layout title="Questão">
       <Template>
         <div>
           <div>
-            <QuestionProgress progress={question.questionNumber} />
-            <QuestionTitle>{question.question}</QuestionTitle>
+            <QuestionProgress
+              progress={Number(question?.questionNumber ?? "0")}
+            />
+            <QuestionTitle>{question?.question ?? ""}</QuestionTitle>
           </div>
           <div className="flex flex-col gap-8">
             <QuestionList
@@ -128,32 +158,25 @@ export default function Question({ company, game, question }) {
               setSelectedQuestion={setSelectedQuestion}
             />
             <div>
-              {selectedQuestion !== null ? (
-                <Button
-                  level="large"
-                  style={selectedQuestion !== null ? "fill" : "inactive"}
+              <span onClick={sendQuestionAnswer}>
+                <Link
+                  href={`${
+                    question?.questionNumber === 8
+                      ? "/game/end"
+                      : `/game/question/?id=${id}&company=${company}&game=${game}&question=${
+                          Number(question.questionNumber) + 1
+                        }`
+                  }`}
+                  passHref
                 >
-                  <Link
-                    href={`${
-                      Number(question.questionNumber) < 8
-                        ? `/game/question?company=${company}&game=${game}&question=${
-                            questionNumber + 1
-                          }`
-                        : `/game/end`
-                    }`}
-                    passHref
+                  <Button
+                    level="large"
+                    style={selectedQuestion !== null ? "fill" : "inactive"}
                   >
                     CONTINUAR
-                  </Link>
-                </Button>
-              ) : (
-                <Button
-                  level="large"
-                  style={selectedQuestion !== null ? "fill" : "inactive"}
-                >
-                  CONTINUAR
-                </Button>
-              )}
+                  </Button>
+                </Link>
+              </span>
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Template from "../../src/components/Elements/Template";
 import Layout from "../../src/components/Layout";
 
@@ -11,16 +11,17 @@ export async function getServerSideProps({ query }) {
   const matches = await getMatches();
   const answers = await getAnswersUser(query.id);
   const company = query.company;
-  return { props: { matches, answers, company } };
+  const id = query.id;
+  return { props: { matches, answers, company, id } };
 }
 
-export default function Matches({ matches, answers, company }) {
+export default function Matches({ matches, answers, company, id }) {
   function MatchCard({ index, icon, title, active }) {
     return (
       <div className="flex gap-8">
         <div
-          className={`w-16 aspect-square  bg-gradient-to-b from-primary-${
-            active ? "yellow" : "white"
+          className={`w-16 aspect-square  bg-gradient-to-b ${
+            active ? "from-primary-yellow" : "from-secondary-700"
           } to-secondary-200 rounded-full p-1`}
         >
           <div
@@ -28,7 +29,11 @@ export default function Matches({ matches, answers, company }) {
               active ? "900" : "100"
             }`}
           >
-            <Icon icon={icon} height={32} />
+            <Icon
+              icon={icon}
+              height={32}
+              color={`${active ? "#00000099" : "#0003"}`}
+            />
           </div>
         </div>
         <div className="flex flex-col justify-center">
@@ -53,15 +58,18 @@ export default function Matches({ matches, answers, company }) {
                 (answer) => answer.game === Number(index)
               );
 
+              let gameNumber, questionNumber;
+              if (game.length > 0) {
+                gameNumber = game[0].game;
+                questionNumber =
+                  game[0].questions[game[0].questions.length - 1] + 1;
+              }
+
               return (
                 <React.Fragment key={controlIndex}>
                   {game.length > 0 && game[0].questions.length < 8 ? (
                     <Link
-                      href={`/game/question/?company=${company}&game=${
-                        game[0].game
-                      }&question=${
-                        game[0].questions[game[0].questions.length - 1]
-                      }`}
+                      href={`/game/question/?id=${id}&company=${company}&game=${gameNumber}&question=${questionNumber}`}
                     >
                       <MatchCard
                         index={index}
