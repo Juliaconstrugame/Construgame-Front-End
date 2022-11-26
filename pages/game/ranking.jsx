@@ -6,8 +6,7 @@ import { Icon } from "@iconify/react";
 import dataService from "../../src/services/dataService";
 
 export async function getStaticProps() {
-    let resultRanking = await dataService.ranking({ company: 'construgame', type: 'administration' })
-
+    let resultRanking = await dataService.ranking({ company: '1', type: 'administration' })
     return {
         props: {
             resultRanking

@@ -23,7 +23,7 @@ async function match()
 async function ranking({company, type}) 
 { 
     const response = await fetch(
-        process.env.API_URL + 'ranking?company='+ company + '&type=' + type,
+        process.env.API_URL + '/v1/quiz/ranking?company='+ company + '&type=' + type,
         { 
             method: 'GET', 
             agent,
