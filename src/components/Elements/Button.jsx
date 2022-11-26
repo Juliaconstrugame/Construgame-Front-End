@@ -1,5 +1,5 @@
-export default function Button({ children, level, style, custom }) {
-  const Button = function (level, style, content) {
+export default function Button({ children, level, style, custom, onClick }) {
+  const Button = function (level, style, content, onClick) {
     const styleReference = {
       outline:
         "outline outline-1 outline-secondary-100 rounded-md text-secondary-100",
@@ -16,14 +16,14 @@ export default function Button({ children, level, style, custom }) {
     this.style =
       style in styleReference ? styleReference[style] : styleReference["fill"];
     this.button = (
-      <button className={`${this.level} ${this.style} ${custom}`}>
+      <button className={`${this.level} ${this.style} ${custom}`} onClick={onClick}>
         {" "}
         {content}
       </button>
     );
   };
 
-  const output = new Button(level, style, children);
+  const output = new Button(level, style, children, onClick);
 
   return output.button;
 }

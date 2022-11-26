@@ -1,31 +1,41 @@
+import React from "react";
 import Template from "../../src/components/Elements/Template";
 import Layout from "../../src/components/Layout";
 import Heading from "../../src/components/Elements/Heading";
 import Button from "../../src/components/Elements/Button";
 
 import { Icon } from "@iconify/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import dataService from "../../src/services/dataService";
-import { getQuestion } from "../../src/services/UserService";
+import {
+  getAnswersUser,
+  getQuestion,
+  sendAnswer,
+} from "../../src/services/UserService";
 
-async function getData({ company, game, question }) {
-  let resultQuestions = await dataService.questions({
-    company,
-    game,
-    question,
-  });
-  return resultQuestions;
-}
-
-export async function getServerSideProps({ query }) {
-  const { company, game, question } = query;
+export const getServerSideProps = async ({ query }) => {
+  const { id, company, game, question, type, name } = query;
   const data = await getQuestion(company, game, question);
-  return { props: { company, game, question: data } };
-}
+  return { props: { id, company, game, question: data, type, name } };
+};
 
-export default function Question({ company, game, question }) {
-  const [selectedQuestion, setSelectedQuestion] = useState(null);
+export default function Question({ id, company, game, question, type, name }) {
+  const [selectedQuestion, setSelectedQuestion] = useState([]);
+  const [time, setTime] = useState(0);
+
+  // useEffect(() => {
+  //   console.log("TIME =>", time);
+  // }, [time]);
+
+  useEffect(() => {
+    console.log(id, company, game, question, type, name);
+    const interval = setInterval(() => {
+      setTime((time) => time + 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   function QuestionProgress({ progress }) {
     return (
@@ -54,7 +64,7 @@ export default function Question({ company, game, question }) {
         </div>
         <div className="flex items-center">
           <Heading level="small" customStyle="!text-[18px]">
-            {question.question}
+            {question?.question ?? ""}
           </Heading>
         </div>
       </div>
@@ -77,17 +87,27 @@ export default function Question({ company, game, question }) {
               className={`
                                     bg-others-grey-100 
                                     outline outline-2 
-                                    ${
-                                      selectedQuestion === index
-                                        ? "outline-[#00FF57]"
-                                        : "outline-others-grey-200 "
-                                    }
+                                    ${selectedQuestion.length > 0 &&
+                  selectedQuestion.filter(
+                    (item) => item === text
+                  ).length > 0
+                  ? "outline-[#00FF57]"
+                  : "outline-others-grey-200 "
+                }
                                     flex flex-col gap-4
                                     rounded-2xl 
                                     p-4 
                                 `}
               key={`question-${index}`}
-              onClick={() => setSelectedQuestion(index)}
+              onClick={() => {
+                const added = selectedQuestion.filter((item) => item === text);
+
+                if (added.length > 0)
+                  setSelectedQuestion((values) =>
+                    values.filter((item) => item !== text)
+                  );
+                else setSelectedQuestion((values) => [...values, text]);
+              }}
             >
               <div className="">
                 <div
@@ -107,19 +127,32 @@ export default function Question({ company, game, question }) {
     );
   }
 
-  const sendQuestionAnswer = () => {
-    console.log("SELECTED QUESTION =>", selectedQuestion);
+  const sendQuestionAnswer = async () => {
+    try {
+      await sendAnswer({
+        idUser: id,
+        game: Number(game),
+        numberAnswer: Number(question?.questionNumber),
+        alternative: selectedQuestion.map((item) => item.toString()),
+        time,
+      });
+      setTime(0);
+      setSelectedQuestion([]);
+    } catch (error) {
+      if (error.response) console.log("ERROR DATA:", error.response.data);
+      else console.log("ERROR:", error);
+    }
   };
-
-  const questionNumber = Number(question.questionNumber);
 
   return (
     <Layout title="Questão">
-      <Template>
+      <Template name={name} id={id} company={company} type={type}>
         <div>
           <div>
-            <QuestionProgress progress={question.questionNumber} />
-            <QuestionTitle>{question.question}</QuestionTitle>
+            <QuestionProgress
+              progress={Number(question?.questionNumber ?? "0")}
+            />
+            <QuestionTitle>{question?.question ?? ""}</QuestionTitle>
           </div>
           <div className="flex flex-col gap-8">
             <QuestionList
@@ -128,32 +161,22 @@ export default function Question({ company, game, question }) {
               setSelectedQuestion={setSelectedQuestion}
             />
             <div>
-              {selectedQuestion !== null ? (
-                <Button
-                  level="large"
-                  style={selectedQuestion !== null ? "fill" : "inactive"}
-                >
-                  <Link
-                    href={`${
-                      Number(question.questionNumber) < 8
-                        ? `/game/question?company=${company}&game=${game}&question=${
-                            questionNumber + 1
-                          }`
-                        : `/game/end`
+              <Button
+                level="large"
+                style={selectedQuestion !== null ? "fill" : "inactive"}
+                onClick={sendQuestionAnswer}
+              >
+                <Link
+                  href={`${Number(question?.questionNumber) === 8
+                    ? `/game/end/?idUser=${id}&game=${game}&name=${name}&type=${type}&company=${company}`
+                    : `/game/question/?id=${id}&company=${company}&game=${game}&question=${Number(question.questionNumber) + 1
+                    }&type=${type}&name=${name}`
                     }`}
-                    passHref
-                  >
-                    CONTINUAR
-                  </Link>
-                </Button>
-              ) : (
-                <Button
-                  level="large"
-                  style={selectedQuestion !== null ? "fill" : "inactive"}
+                  passHref
                 >
                   CONTINUAR
-                </Button>
-              )}
+                </Link>
+              </Button>
             </div>
           </div>
         </div>

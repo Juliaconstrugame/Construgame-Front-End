@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Template from "../../src/components/Elements/Template";
 import Layout from "../../src/components/Layout";
 
@@ -11,16 +11,19 @@ export async function getServerSideProps({ query }) {
   const matches = await getMatches();
   const answers = await getAnswersUser(query.id);
   const company = query.company;
-  return { props: { matches, answers, company } };
+  const id = query.id;
+  const name = query.name;
+  const type = query.type;
+  return { props: { matches, answers, company, id, name, type } };
 }
 
-export default function Matches({ matches, answers, company }) {
+export default function Matches({ matches, answers, company, id, name, type }) {
   function MatchCard({ index, icon, title, active }) {
     return (
       <div className="flex gap-8">
         <div
-          className={`w-16 aspect-square  bg-gradient-to-b from-primary-${
-            active ? "yellow" : "white"
+          className={`w-16 aspect-square  bg-gradient-to-b ${
+            active ? "from-primary-yellow" : "from-secondary-700"
           } to-secondary-200 rounded-full p-1`}
         >
           <div
@@ -28,7 +31,11 @@ export default function Matches({ matches, answers, company }) {
               active ? "900" : "100"
             }`}
           >
-            <Icon icon={icon} height={32} />
+            <Icon
+              icon={icon}
+              height={32}
+              color={`${active ? "#00000099" : "#0003"}`}
+            />
           </div>
         </div>
         <div className="flex flex-col justify-center">
@@ -45,7 +52,7 @@ export default function Matches({ matches, answers, company }) {
 
   return (
     <Layout title="Partidas">
-      <Template>
+      <Template name={name} id={id} company={company} type={type}>
         <section className="flex flex-col items-center py-16">
           <div className="flex flex-col ">
             {matches.map(function ({ index, icon, title }, controlIndex) {
@@ -53,21 +60,35 @@ export default function Matches({ matches, answers, company }) {
                 (answer) => answer.game === Number(index)
               );
 
+              let gameNumber, questionNumber;
+              if (game.length > 0) {
+                gameNumber = game[0].game;
+                questionNumber =
+                  game[0].questions[game[0].questions.length - 1] + 1;
+              }
+
               return (
                 <React.Fragment key={controlIndex}>
-                  {game.length > 0 && game[0].questions.length < 8 ? (
+                  {game.length === 0 && Number(index) === 1 ? (
                     <Link
-                      href={`/game/question/?company=${company}&game=${
-                        game[0].game
-                      }&question=${
-                        game[0].questions[game[0].questions.length - 1]
-                      }`}
+                      href={`/game/question/?id=${id}&company=${company}&game=${1}&question=${1}&type=${type}&name=${name}`}
                     >
                       <MatchCard
                         index={index}
                         icon={icon}
                         title={title}
-                        active={game[0].questions.length < 8}
+                        active={true}
+                      />
+                    </Link>
+                  ) : game[0]?.questions.length < 8 ? (
+                    <Link
+                      href={`/game/question/?id=${id}&company=${company}&game=${gameNumber}&question=${questionNumber}&type=${type}&name=${name}`}
+                    >
+                      <MatchCard
+                        index={index}
+                        icon={icon}
+                        title={title}
+                        active={game[0]?.questions.length < 8}
                       />
                     </Link>
                   ) : (
