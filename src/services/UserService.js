@@ -35,3 +35,10 @@ export const getPoints = async (id, game) => {
   );
   return data;
 };
+
+export const getRanking = async (type, company, game) => {
+  const { data } = await api.get(
+    `/v1/quiz/ranking?company=${company}&type=${type}&game=${game}`
+  );
+  return data;
+};

@@ -52,7 +52,11 @@ export default function Home({ user }) {
           <section className="flex flex-col gap-4">
             <div className="flex justify-around">
               <Button style="fill" level="large">
-                <Link href={`/game/matches/?id=${user.id}&company=${user.company}`}>PARTICIPAR AGORA</Link>
+                <Link
+                  href={`/game/matches/?id=${user.id}&name=${user.name}&company=${user.company}&type=${user.type}`}
+                >
+                  PARTICIPAR AGORA
+                </Link>
               </Button>
             </div>
             <div className="">

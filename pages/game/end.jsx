@@ -12,7 +12,6 @@ export const getServerSideProps = async ({ query }) => {
 };
 
 export default function EndMatch({ points }) {
-  console.log("POINTS =>", points);
   return (
     <Layout>
       <Template full={true}>

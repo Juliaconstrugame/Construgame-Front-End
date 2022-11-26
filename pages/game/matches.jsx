@@ -12,10 +12,12 @@ export async function getServerSideProps({ query }) {
   const answers = await getAnswersUser(query.id);
   const company = query.company;
   const id = query.id;
-  return { props: { matches, answers, company, id } };
+  const name = query.name;
+  const type = query.type
+  return { props: { matches, answers, company, id, name, type } };
 }
 
-export default function Matches({ matches, answers, company, id }) {
+export default function Matches({ matches, answers, company, id, name, type }) {
   function MatchCard({ index, icon, title, active }) {
     return (
       <div className="flex gap-8">
@@ -50,7 +52,7 @@ export default function Matches({ matches, answers, company, id }) {
 
   return (
     <Layout title="Partidas">
-      <Template>
+      <Template name={name} id={id} company={company} type={type}>
         <section className="flex flex-col items-center py-16">
           <div className="flex flex-col ">
             {matches.map(function ({ index, icon, title }, controlIndex) {
