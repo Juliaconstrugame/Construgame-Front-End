@@ -3,6 +3,7 @@ import Layout from "../../src/components/Layout";
 import Template from "../../src/components/Elements/Template";
 import Heading from "../../src/components/Elements/Heading";
 import Button from "../../src/components/Elements/Button";
+import Link from "next/link";
 import { getPoints } from "../../src/services/UserService";
 
 export const getServerSideProps = async ({ query }) => {
@@ -110,9 +111,13 @@ export default function EndMatch({ points, id, game, company, type, name }) {
             />
 
             <div className="container">
-              <Button level="large" customStyle="w-full">
-                VER RANKING
-              </Button>
+              <Link
+                href={`/game/ranking?company=${company}&type=${type}&game=1&id=${id}&name=${name}`}
+              >
+                <Button style="fill" level="large">
+                  VER RANKING
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
