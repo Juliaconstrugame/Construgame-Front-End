@@ -27,7 +27,7 @@ export default function Menu({ id, name, company, type }) {
 
   navigation.push(new NavigationOption("Home", "bx:home", `/?id=${id}`));
 
-  const url = `/game/matches?id=${id}&name=${name}&company=${company}&type=${type}`;
+  const url = `/game/matches/?id=${id}&name=${name}&company=${company}&type=${type}`;
   navigation.push(new NavigationOption("Copa", "bx:flag", url));
   navigation.push(
     new NavigationOption(

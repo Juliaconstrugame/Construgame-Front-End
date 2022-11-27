@@ -8,7 +8,7 @@ export const getUser = async (id) => {
 };
 
 export const getAnswersUser = async (id) => {
-  const { data } = await api.get(`/v1/userAnswer?idUser=${id}`);
+  const { data } = await api.get(`/v1/userAnswer/?idUser=${id}`);
   return data;
 };
 
@@ -31,7 +31,7 @@ export const sendAnswer = async (values) => {
 
 export const getPoints = async (id, game) => {
   const { data } = await api.get(
-    `/v1/userPointsGame?idUser=${id}&game=${game}`
+    `/v1/userPointsGame/?idUser=${id}&game=${game}`
   );
   return data;
 };

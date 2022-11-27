@@ -42,7 +42,7 @@ async function ranking({company, type})
 async function questions({company, game, question}) 
 { 
     const response = await fetch(
-        process.env.API_URL + 'questions?company='+ company + '&game=' + game + '&question=' + question,
+        process.env.API_URL + 'questions/?company='+ company + '&game=' + game + '&question=' + question,
         { 
             method: 'GET', 
             agent,

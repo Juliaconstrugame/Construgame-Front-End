@@ -112,7 +112,7 @@ export default function EndMatch({ points, id, game, company, type, name }) {
 
             <div className="container">
               <Link
-                href={`/game/ranking?company=${company}&type=${type}&game=1&id=${id}&name=${name}`}
+                href={`/game/ranking/?company=${company}&type=${type}&game=1&id=${id}&name=${name}`}
               >
                 <Button style="fill" level="large">
                   VER RANKING
