@@ -13,6 +13,7 @@ import {
   getQuestion,
   sendAnswer,
 } from "../../src/services/UserService";
+import Head from "next/head";
 
 export const getServerSideProps = async ({ query }) => {
   const { id, company, game, question, type, name } = query;
@@ -87,13 +88,14 @@ export default function Question({ id, company, game, question, type, name }) {
               className={`
                                     bg-others-grey-100 
                                     outline outline-2 
-                                    ${selectedQuestion.length > 0 &&
-                  selectedQuestion.filter(
-                    (item) => item === text
-                  ).length > 0
-                  ? "outline-[#00FF57]"
-                  : "outline-others-grey-200 "
-                }
+                                    ${
+                                      selectedQuestion.length > 0 &&
+                                      selectedQuestion.filter(
+                                        (item) => item === text
+                                      ).length > 0
+                                        ? "outline-[#00FF57]"
+                                        : "outline-others-grey-200 "
+                                    }
                                     flex flex-col gap-4
                                     rounded-2xl 
                                     p-4 
@@ -145,9 +147,16 @@ export default function Question({ id, company, game, question, type, name }) {
   };
 
   return (
-    <Layout title="Questão">
-      <Template name={name} id={id} company={company} type={type}>
-        <div>
+    <div>
+      <Head>
+        <meta
+          http-equiv="Content-Security-Policy"
+          content="upgrade-insecure-requests"
+        />
+      </Head>
+
+      <Layout title="Questão">
+        <Template name={name} id={id} company={company} type={type}>
           <div>
             <QuestionProgress
               progress={Number(question?.questionNumber ?? "0")}
@@ -167,11 +176,13 @@ export default function Question({ id, company, game, question, type, name }) {
                 onClick={sendQuestionAnswer}
               >
                 <Link
-                  href={`${Number(question?.questionNumber) === 8
-                    ? `/game/end/?idUser=${id}&game=${game}&name=${name}&type=${type}&company=${company}`
-                    : `/game/question/?id=${id}&company=${company}&game=${game}&question=${Number(question.questionNumber) + 1
-                    }&type=${type}&name=${name}`
-                    }`}
+                  href={`${
+                    Number(question?.questionNumber) === 8
+                      ? `/game/end/?idUser=${id}&game=${game}&name=${name}&type=${type}&company=${company}`
+                      : `/game/question/?id=${id}&company=${company}&game=${game}&question=${
+                          Number(question.questionNumber) + 1
+                        }&type=${type}&name=${name}`
+                  }`}
                   passHref
                 >
                   CONTINUAR
@@ -179,8 +190,8 @@ export default function Question({ id, company, game, question, type, name }) {
               </Button>
             </div>
           </div>
-        </div>
-      </Template>
-    </Layout>
+        </Template>
+      </Layout>
+    </div>
   );
 }

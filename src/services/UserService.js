@@ -25,7 +25,7 @@ export const getQuestion = async (company, game, question) => {
 };
 
 export const sendAnswer = async (values) => {
-  const { data } = await api.post(`/v1/userAnswer`, values);
+  const { data } = await api.get(`/v1/userAnswerPost?params=` + JSON.stringify(values), );
   return data;
 };
 
