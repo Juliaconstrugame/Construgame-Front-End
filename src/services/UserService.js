@@ -25,10 +25,9 @@ export const getQuestion = async (company, game, question) => {
 };
 
 export const sendAnswer = async (values) => {
-  const { data } = await api.get(`/v1/userAnswerPost/?params=` + JSON.stringify(values), );
+  const { data } = await api.get(`/v1/userAnswerPost/?params=` + JSON.stringify(values));
   return data;
 };
-
 
 
 export const getPoints = async (id, game) => {
