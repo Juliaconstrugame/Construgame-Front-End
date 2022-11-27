@@ -19,15 +19,17 @@ export const getMatches = async () => {
 
 export const getQuestion = async (company, game, question) => {
   const { data } = await api.get(
-    `/v1/quiz/questions?company=${company}&game=${game}&question=${question}`
+    `/v1/quiz/questions/?company=${company}&game=${game}&question=${question}`
   );
   return data;
 };
 
 export const sendAnswer = async (values) => {
-  const { data } = await api.get(`/v1/userAnswerPost?params=` + JSON.stringify(values), );
+  const { data } = await api.get(`/v1/userAnswerPost/?params=` + JSON.stringify(values), );
   return data;
 };
+
+
 
 export const getPoints = async (id, game) => {
   const { data } = await api.get(
@@ -38,7 +40,7 @@ export const getPoints = async (id, game) => {
 
 export const getRanking = async (type, company, game) => {
   const { data } = await api.get(
-    `/v1/quiz/ranking?company=${company}&type=${type}&game=${game}`
+    `/v1/quiz/ranking/?company=${company}&type=${type}&game=${game}`
   );
   return data;
 };
