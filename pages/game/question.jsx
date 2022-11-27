@@ -163,9 +163,9 @@ export default function Question({ id, company, game, question, type, name }) {
             <div>
               <Link
                 href={`${Number(question?.questionNumber) === 8
-                    ? `/game/end/?idUser=${id}&game=${game}&name=${name}&type=${type}&company=${company}`
-                    : `/game/question/?id=${id}&company=${company}&game=${game}&question=${Number(question.questionNumber) + 1
-                    }&type=${type}&name=${name}/`
+                  ? `/game/end/?idUser=${id}&game=${game}&name=${name}&type=${type}&company=${company}`
+                  : `/game/question/?id=${id}&company=${company}&game=${game}&question=${Number(question.questionNumber) + 1
+                  }&type=${type}&name=${name}`
                   }`}
                 passHref
               >
