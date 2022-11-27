@@ -15,13 +15,13 @@ export default function Header({ name = "", company = "", id = "", type = "" }) 
         </div>
         <div
           className="col-span-2 w-full flex justify-center items-center cursor-pointer"
-          onClick={() => router.push("/game/matches")}
+          onClick={() => router.push(`/game/matches/?id=${id}&name=${name}&company=${company}&type=${type}`)}
         >
           <Logo />
         </div>
         <div
           className="col-span-1 w-full flex justify-end items-center cursor-pointer"
-          onClick={() => router.push("/game/ranking")}
+          onClick={() => router.push(`/game/ranking/?company=${company}&type=${type}&game=1&id=${id}&name=${name}`)}
         >
           <Avatar name={name} />
         </div>
