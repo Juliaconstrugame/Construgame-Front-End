@@ -1,16 +1,36 @@
-import Template from "../../src/components/Elements/Template";
-import Layout from "../../src/components/Layout";
-import Avatar from "../../src/components/Elements/Template/Header/Avatar";
-import React from "react";
-import { Icon } from "@iconify/react";
-import dataService from "../../src/services/dataService";
-import { getRanking } from "../../src/services/UserService";
+import Template from '../../src/components/Elements/Template';
+import Layout from '../../src/components/Layout';
+import Avatar from '../../src/components/Elements/Template/Header/Avatar';
+import React from 'react';
+import { Icon } from '@iconify/react';
+import { getRanking, getRankingAdministrative, getRankingOperation } from '../../src/services/UserService';
 
 export const getServerSideProps = async ({ query }) => {
-  const { game, type, company, id, name } = query;
-  const data = await getRanking(type, company, game);
+  const {
+    game, type, company, id, name, typeRanking
+  } = query;
+
+  let data
+  if (!typeRanking) {
+    data = await getRanking(type, company, game);
+  }
+
+  if (typeRanking === 'team') {
+    data = await getRanking(type, company, game);
+  }
+
+  if (typeRanking === 'administrative') {
+    data = await getRankingAdministrative(game);
+  }
+
+  if (typeRanking === 'operational') {
+    data = await getRankingOperation(game);
+  }
+
   return {
-    props: { resultRanking: data, company, id, name, game, type },
+    props: {
+      resultRanking: data, company, id, name, game, type
+    }
   };
 };
 
@@ -20,19 +40,20 @@ export default function Ranking({
   id,
   name,
   game,
-  type,
+  type
 }) {
   const currentPlayer = 2;
 
-  function Player({ ranking, name, points, current }) {
+  function Player({
+    ranking, name, points, current
+  }) {
     const podium = {
       1: <Icon icon="fluent-emoji-flat:1st-place-medal" height={32} />,
       2: <Icon icon="fluent-emoji-flat:2nd-place-medal" height={32} />,
-      3: <Icon icon="fluent-emoji-flat:3rd-place-medal" height={32} />,
+      3: <Icon icon="fluent-emoji-flat:3rd-place-medal" height={32} />
     };
 
-    const currentStyle =
-      "bg-gradient-to-b from-others-yellow-300 to-transparent";
+    const currentStyle = 'bg-gradient-to-b from-others-yellow-300 to-transparent';
 
     return (
       <div className={`flex gap-4 items-center p-3 ${current && currentStyle}`}>
@@ -66,7 +87,7 @@ export default function Ranking({
                 points={points}
                 current={index === currentPlayer}
               />
-              {data.length - 1 !== index ? <hr /> : ""}
+              {data.length - 1 !== index ? <hr /> : ''}
             </React.Fragment>
           );
         })}
