@@ -1,18 +1,50 @@
-import { Icon } from "@iconify/react";
-import Layout from "../../src/components/Layout";
-import Template from "../../src/components/Elements/Template";
-import Heading from "../../src/components/Elements/Heading";
-import Button from "../../src/components/Elements/Button";
-import Link from "next/link";
-import { getPoints } from "../../src/services/UserService";
+import { Icon } from '@iconify/react';
+import Layout from '../../src/components/Layout';
+import Template from '../../src/components/Elements/Template';
+import Heading from '../../src/components/Elements/Heading';
+import Button from '../../src/components/Elements/Button';
+import Link from 'next/link';
+import { getPoints } from '../../src/services/UserService';
 
 export const getServerSideProps = async ({ query }) => {
-  const { idUser, game, company, type, name } = query;
+  const {
+    idUser, game, company, type, name
+  } = query;
   const points = await getPoints(idUser, game);
-  return { props: { points, id: idUser, game, company, type, name } };
+  let typeRanking
+  if (type === 'Administrativo') {
+    typeRanking = 'administrative'
+  }
+  if (type === 'Operacional') {
+    typeRanking = 'operational'
+  }
+
+  let message
+
+  if (points.gool >= 10) {
+    message = 'Você é o Pelé!'
+  } else if (points.gool === 9) {
+    message = 'Você é quase um Pelé!'
+  } else if (points.gool === 7 || points.gool === 8) {
+    message = 'Muito bom!'
+  } else if (points.gool === 5 || points.gool === 6) {
+    message = 'Podemos melhorar!'
+  } else if (points.gool <= 0) {
+    message = 'Muito fraco!'
+  } else {
+    message = 'Fraco! Treine mais'
+  }
+
+  return {
+    props: {
+      points, id: idUser, game, company, type, name, typeRanking, message
+    }
+  };
 };
 
-export default function EndMatch({ points, id, game, company, type, name }) {
+export default function EndMatch({
+  points, id, game, company, type, name, typeRanking, message
+}) {
   return (
     <Layout>
       <Template
@@ -54,7 +86,7 @@ export default function EndMatch({ points, id, game, company, type, name }) {
                                     `}
                 >
                   <Heading level="medium" customStyle="text-primary-white">
-                    Excelente!
+                    {message}
                   </Heading>
                 </div>
                 <div className="rounded-md bg-primary-white px-4 py-6 flex gap-4 justify-between text-[#262626]">
@@ -104,18 +136,18 @@ export default function EndMatch({ points, id, game, company, type, name }) {
               className="flex-1 w-full aspect-[6/5]"
               style={{
                 backgroundImage: "url('/images/construgame-field-quiz.png')",
-                backgroundPosition: "center center",
-                backgroundSize: "cover",
-                backgroundRepeat: "no-repeat",
+                backgroundPosition: 'center center',
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat'
               }}
             />
 
             <div className="container">
               <Link
-                href={`/game/ranking/?company=${company}&type=${type}&game=1&id=${id}&name=${name}`}
+                href={`/game/ranking/?company=${company}&type=${type}&game=1&id=${id}&name=${name}&typeRanking=${typeRanking}`}
               >
                 <Button style="fill" level="large">
-                  VER RANKING
+                  VER RANKING GERAL
                 </Button>
               </Link>
             </div>

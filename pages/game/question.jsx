@@ -1,35 +1,38 @@
-import React from "react";
-import Template from "../../src/components/Elements/Template";
-import Layout from "../../src/components/Layout";
-import Heading from "../../src/components/Elements/Heading";
-import Button from "../../src/components/Elements/Button";
+import React from 'react';
+import Template from '../../src/components/Elements/Template';
+import Layout from '../../src/components/Layout';
+import Heading from '../../src/components/Elements/Heading';
+import Button from '../../src/components/Elements/Button';
 
-import { Icon } from "@iconify/react";
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import dataService from "../../src/services/dataService";
+import { Icon } from '@iconify/react';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import dataService from '../../src/services/dataService';
 import {
   getAnswersUser,
   getQuestion,
-  sendAnswer,
-} from "../../src/services/UserService";
+  sendAnswer
+} from '../../src/services/UserService';
 
 export const getServerSideProps = async ({ query }) => {
-  const { id, company, game, question, type, name } = query;
+  const {
+    id, company, game, question, type, name
+  } = query;
   const data = await getQuestion(company, game, question);
-  return { props: { id, company, game, question: data, type, name } };
+  return {
+    props: {
+      id, company, game, question: data, type, name
+    }
+  };
 };
 
-export default function Question({ id, company, game, question, type, name }) {
+export default function Question({
+  id, company, game, question, type, name
+}) {
   const [selectedQuestion, setSelectedQuestion] = useState([]);
   const [time, setTime] = useState(0);
 
-  // useEffect(() => {
-  //   console.log("TIME =>", time);
-  // }, [time]);
-
   useEffect(() => {
-    console.log(id, company, game, question, type, name);
     const interval = setInterval(() => {
       setTime((time) => time + 1);
     }, 1000);
@@ -64,7 +67,7 @@ export default function Question({ id, company, game, question, type, name }) {
         </div>
         <div className="flex items-center">
           <Heading level="small" customStyle="!text-[18px]">
-            {question?.question ?? ""}
+            {question?.question ?? ''}
           </Heading>
         </div>
       </div>
@@ -77,9 +80,9 @@ export default function Question({ id, company, game, question, type, name }) {
         {data.map(function ({ url, text }, index) {
           const styleImage = {
             backgroundImage: `url('/images/questions/${url}')`,
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center center",
-            backgroundSize: "cover",
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center center',
+            backgroundSize: 'cover'
           };
 
           return (
@@ -87,12 +90,12 @@ export default function Question({ id, company, game, question, type, name }) {
               className={`
                                     bg-others-grey-100 
                                     outline outline-2 
-                                    ${selectedQuestion.length > 0 &&
-                  selectedQuestion.filter(
+                                    ${selectedQuestion.length > 0
+                  && selectedQuestion.filter(
                     (item) => item === text
                   ).length > 0
-                  ? "outline-[#00FF57]"
-                  : "outline-others-grey-200 "
+                  ? 'outline-[#00FF57]'
+                  : 'outline-others-grey-200 '
                 }
                                     flex flex-col gap-4
                                     rounded-2xl 
@@ -102,11 +105,7 @@ export default function Question({ id, company, game, question, type, name }) {
               onClick={() => {
                 const added = selectedQuestion.filter((item) => item === text);
 
-                if (added.length > 0)
-                  setSelectedQuestion((values) =>
-                    values.filter((item) => item !== text)
-                  );
-                else setSelectedQuestion((values) => [...values, text]);
+                if (added.length > 0) { setSelectedQuestion((values) => values.filter((item) => item !== text)); } else setSelectedQuestion((values) => [...values, text]);
               }}
             >
               <div className="">
@@ -134,13 +133,13 @@ export default function Question({ id, company, game, question, type, name }) {
         game: Number(game),
         numberAnswer: Number(question?.questionNumber),
         alternative: selectedQuestion.map((item) => item.toString()),
-        time,
+        time
       });
       setTime(0);
       setSelectedQuestion([]);
     } catch (error) {
-      if (error.response) console.log("ERROR DATA:", error.response.data);
-      else console.log("ERROR:", error);
+      if (error.response) console.log('ERROR DATA:', error.response.data);
+      else console.log('ERROR:', error);
     }
   };
 
@@ -150,9 +149,9 @@ export default function Question({ id, company, game, question, type, name }) {
         <div>
           <div>
             <QuestionProgress
-              progress={Number(question?.questionNumber ?? "0")}
+              progress={Number(question?.questionNumber ?? '0')}
             />
-            <QuestionTitle>{question?.question ?? ""}</QuestionTitle>
+            <QuestionTitle>{question?.question ?? ''}</QuestionTitle>
           </div>
           <div className="flex flex-col gap-8">
             <QuestionList
@@ -171,7 +170,7 @@ export default function Question({ id, company, game, question, type, name }) {
               >
                 <Button
                   level="large"
-                  style={selectedQuestion.length > 0 ? "fill" : "inactive"}
+                  style={selectedQuestion.length > 0 ? 'fill' : 'inactive'}
                   onClick={sendQuestionAnswer}
                 >
                   CONTINUAR

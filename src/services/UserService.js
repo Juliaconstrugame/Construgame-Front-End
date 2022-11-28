@@ -1,6 +1,4 @@
-import api from "./api";
-const http = require("http");
-const agent = new http.Agent({ rejectUnauthorized: false });
+import api from './api';
 
 export const getUser = async (id) => {
   const { data } = await api.get(`/v1/user/${id}`);
@@ -13,7 +11,7 @@ export const getAnswersUser = async (id) => {
 };
 
 export const getMatches = async () => {
-  const { data } = await api.get("/v1/quiz/matches");
+  const { data } = await api.get('/v1/quiz/matches');
   return data;
 };
 
@@ -25,10 +23,9 @@ export const getQuestion = async (company, game, question) => {
 };
 
 export const sendAnswer = async (values) => {
-  const { data } = await api.get(`/v1/userAnswerPost/?params=` + JSON.stringify(values));
+  const { data } = await api.get('/v1/userAnswerPost/?params=' + JSON.stringify(values));
   return data;
 };
-
 
 export const getPoints = async (id, game) => {
   const { data } = await api.get(
@@ -40,6 +37,20 @@ export const getPoints = async (id, game) => {
 export const getRanking = async (type, company, game) => {
   const { data } = await api.get(
     `/v1/quiz/ranking/?company=${company}&type=${type}&game=${game}`
+  );
+  return data;
+};
+
+export const getRankingAdministrative = async (game) => {
+  const { data } = await api.get(
+    `/v1/quiz/ranking/?game=${game}&type=Administrativo`
+  );
+  return data;
+};
+
+export const getRankingOperation = async (game) => {
+  const { data } = await api.get(
+    `/v1/quiz/ranking/?game=${game}&type=Operacional`
   );
   return data;
 };

@@ -1,9 +1,11 @@
-import { useState } from "react";
-import { Icon } from "@iconify/react";
-import React from "react";
-import { useRouter } from "next/router";
+import { useState } from 'react';
+import { Icon } from '@iconify/react';
+import React from 'react';
+import { useRouter } from 'next/router';
 
-export default function Menu({ id, name, company, type }) {
+export default function Menu({
+  id, name, company, type
+}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
 
@@ -25,20 +27,38 @@ export default function Menu({ id, name, company, type }) {
   // const settings = new NavigationOption("Configurações", "bx:cog", "/settings");
   // const logout = new NavigationOption("Sair", "bx:exit", "/logout");
 
-  navigation.push(new NavigationOption("Home", "bx:home", `/?id=${id}`));
+  navigation.push(new NavigationOption('Home', 'bx:home', `/?id=${id}`));
 
   const url = `/game/matches/?id=${id}&name=${name}&company=${company}&type=${type}`;
-  navigation.push(new NavigationOption("Copa", "bx:flag", url));
+  navigation.push(new NavigationOption('Copa', 'bx:flag', url));
   navigation.push(
     new NavigationOption(
-      "Ranking",
-      "bx:football",
-      `/game/ranking?company=${company}&type=${type}&game=1&id=${id}&name=${name}`
+      'Ranking Time',
+      'bx:football',
+      `/game/ranking?company=${company}&type=${type}&game=1&id=${id}&name=${name}&typeRanking=team`
+    )
+  );
+
+  if (type === "Administrativo") {
+    navigation.push(
+      new NavigationOption(
+        'Ranking Geral Administrativo',
+        'bx:football',
+        `/game/ranking?company=${company}&type=${type}&game=1&id=${id}&name=${name}&typeRanking=administrative`
+      )
+    );
+  }
+
+  navigation.push(
+    new NavigationOption(
+      'Ranking Geral Operacional',
+      'bx:football',
+      `/game/ranking?company=${company}&type=${type}&game=1&id=${id}&name=${name}&typeRanking=operational`
     )
   );
 
   const urlAwards = `/game/awards/?id=${id}&name=${name}&company=${company}&type=${type}`;
-  navigation.push(new NavigationOption("Prêmios", "bx:trophy", urlAwards));
+  navigation.push(new NavigationOption('Prêmios', 'bx:trophy', urlAwards));
 
   return (
     <React.Fragment>
@@ -46,7 +66,7 @@ export default function Menu({ id, name, company, type }) {
         <Icon icon="ic:round-menu" width="32" />
       </button>
 
-      <div className={`menu ${isMenuOpen ? "isMenuOpen" : ""}`}>
+      <div className={`menu ${isMenuOpen ? 'isMenuOpen' : ''}`}>
         <div className="w-full h-full flex flex-col gap-8 bg-others-grey-1000 rounded-r-xl p-6">
           <div className="flex justify-end">
             <button
